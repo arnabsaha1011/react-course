@@ -1,18 +1,22 @@
 import "./TrackingPage.css";
 import { Link } from 'react-router';
+import LogoWhite from '../assets/images/logo-white.png'
+import MobileLogoWhite from '../assets/images/mobile-logo-white.png'
+import SearchIcon from '../assets/images/icons/search-icon.png'
 
 export function TrackingPage() {
   return (
     <>
       <title>Tracking</title>
+      <link rel="icon" type="image/png" href="/tracking-favicon.png" />
 
       <div className="header">
         <div className="left-section">
           <Link to="/" className="header-link">
             <img className="logo"
-              src="images/logo-white.png" />
+              src={LogoWhite} />
             <img className="mobile-logo"
-              src="images/mobile-logo-white.png" />
+              src={MobileLogoWhite} />
           </Link>
         </div>
 
@@ -20,7 +24,7 @@ export function TrackingPage() {
           <input className="search-bar" type="text" placeholder="Search" />
 
           <button className="search-button">
-            <img className="search-icon" src="images/icons/search-icon.png" />
+            <img className="search-icon" src={SearchIcon} />
           </button>
         </div>
 
