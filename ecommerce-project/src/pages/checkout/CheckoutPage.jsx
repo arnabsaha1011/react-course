@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { CheckoutHeader } from './CheckoutHeader.jsx'
 import { formatMoney } from '../../utils/money.js'
+import { convertTimeToDate } from '../../utils/time.js'
 import './Checkout.css'
 import './CheckoutHeader.css'
 
@@ -44,7 +45,7 @@ export function CheckoutPage({ cart }) {
                   key={cartItem.productId}
                   className="cart-item-container">
                   <div className="delivery-date">
-                    Delivery date: {dayjs(selectedDeliveryOption.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
+                    Delivery date: {convertTimeToDate(selectedDeliveryOption.estimatedDeliveryTimeMs)}
                   </div>
 
                   <div className="cart-item-details-grid">
