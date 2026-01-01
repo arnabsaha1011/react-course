@@ -1,46 +1,44 @@
+import axios from 'axios';
 import "./TrackingPage.css";
+import { useEffect, useState } from "react";
 import { Link } from 'react-router';
-import LogoWhite from '../assets/images/logo-white.png'
-import MobileLogoWhite from '../assets/images/mobile-logo-white.png'
-import SearchIcon from '../assets/images/icons/search-icon.png'
+import { Header } from "../components/Header";
+import { useParams } from "react-router";
+import { convertTimeToDate } from '../utils/time.js';
+import dayjs from 'dayjs';
 
-export function TrackingPage() {
+export function TrackingPage({ cart }) {
+  const { orderId, productId } = useParams();
+  const [order, setOrder] = useState(null);
+
+  useEffect(() => {
+    const fetchTrackingData = async () => {
+      const response = await axios.get(`/api/orders/${orderId}?expand=products`);
+      console.log(response.data);
+      setOrder(response.data);
+    }
+
+    fetchTrackingData();
+  }, [orderId]);
+
+  if (!order)
+  {
+    return <div>Loading...</div>
+  }
+  const orderProduct = order.products.find(prod => prod.product.id === productId)
+  const timePassed = dayjs().valueOf() - order.orderTimeMs;
+  const totalDeliveryTime = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
+  let deliveryProgress = timePassed / totalDeliveryTime * 100;
+  if (deliveryProgress > 100) {
+    deliveryProgress = 100;
+  }
+
   return (
     <>
       <title>Tracking</title>
       <link rel="icon" type="image/png" href="/tracking-favicon.png" />
 
-      <div className="header">
-        <div className="left-section">
-          <Link to="/" className="header-link">
-            <img className="logo"
-              src={LogoWhite} />
-            <img className="mobile-logo"
-              src={MobileLogoWhite} />
-          </Link>
-        </div>
-
-        <div className="middle-section">
-          <input className="search-bar" type="text" placeholder="Search" />
-
-          <button className="search-button">
-            <img className="search-icon" src={SearchIcon} />
-          </button>
-        </div>
-
-        <div className="right-section">
-          <Link className="orders-link header-link" to="/orders">
-
-            <span className="orders-text">Orders</span>
-          </Link>
-
-          <Link className="cart-link header-link" to="/checkout">
-            <img className="cart-icon" src="images/icons/cart-icon.png" />
-            <div className="cart-quantity">3</div>
-            <div className="cart-text">Cart</div>
-          </Link>
-        </div>
-      </div>
+      <Header cart={cart}/>
 
       <div className="tracking-page">
         <div className="order-tracking">
@@ -49,24 +47,24 @@ export function TrackingPage() {
           </Link>
 
           <div className="delivery-date">
-            Arriving on Monday, June 13
+            Arriving on {convertTimeToDate(orderProduct.estimatedDeliveryTimeMs)}
           </div>
 
           <div className="product-info">
-            Black and Gray Athletic Cotton Socks - 6 Pairs
+            {orderProduct.product.name}
           </div>
 
           <div className="product-info">
-            Quantity: 1
+            Quantity: {orderProduct.quantity}
           </div>
 
-          <img className="product-image" src="images/products/athletic-cotton-socks-6-pairs.jpg" />
+          <img className="product-image" src={orderProduct.product.image} />
 
-          <div className="progress-labels-container">
+          <div className="progress-labels-container" >
             <div className="progress-label">
               Preparing
             </div>
-            <div className="progress-label current-status">
+            <div className="progress-label">
               Shipped
             </div>
             <div className="progress-label">
@@ -75,7 +73,7 @@ export function TrackingPage() {
           </div>
 
           <div className="progress-bar-container">
-            <div className="progress-bar"></div>
+            <div className="progress-bar" style={{ width: `${deliveryProgress}%`}}></div>
           </div>
         </div>
       </div>
