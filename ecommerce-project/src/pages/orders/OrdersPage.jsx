@@ -4,10 +4,11 @@ import { Header } from '../../components/Header.jsx'
 import { Link } from 'react-router';
 import { convertTimeToDate } from '../../utils/time.js'
 import { formatMoney } from '../../utils/money.js';
+import { addToCart } from '../../utils/cart.js';
 import BuyAgain from '../../assets/images/icons/buy-again.png'
 import './OrdersPage.css'
 
-export function OrdersPage({ cart }) {
+export function OrdersPage({ loadCart, cart }) {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export function OrdersPage({ cart }) {
                           <div className="product-quantity">
                             Quantity: {prod.quantity}
                           </div>
-                          <button className="buy-again-button button-primary">
+                          <button className="buy-again-button button-primary" onClick={() => addToCart(loadCart, product, 1)}>
                             <img className="buy-again-icon" src={BuyAgain} />
                             <span className="buy-again-message">Add to Cart</span>
                           </button>
