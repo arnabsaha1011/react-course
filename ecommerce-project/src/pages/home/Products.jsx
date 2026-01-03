@@ -4,9 +4,17 @@ import { addToCart } from "../../utils/cart";
 
 export function Product({ product, loadCart }) {
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
 
   const selectQuantity = (event) => {
     setQuantity(event.target.value);
+  }
+
+  const addProductToCart = () => {
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 2000);
   }
 
   return (
@@ -49,13 +57,13 @@ export function Product({ product, loadCart }) {
 
       <div className="product-spacer"></div>
 
-      <div className="added-to-cart">
+      <div className="added-to-cart" style={{ opacity: isAdded ? 1 : 0 }}>
         <img src="images/icons/checkmark.png" />
         Added
       </div>
 
       <button className="add-to-cart-button button-primary"
-        onClick={() => addToCart(loadCart, product, quantity)}>
+        onClick={() => addToCart(loadCart, product, quantity, addProductToCart)}>
         Add to Cart
       </button>
     </div>
