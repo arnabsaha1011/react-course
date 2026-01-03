@@ -1,4 +1,4 @@
-import { Product } from "./Products";
+import { Product } from "./Product";
 
 export function ProductsGrid({ products, loadCart }) {
 
